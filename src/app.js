@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('node:path');
 require('dotenv').config();
 
+const postRouter = require('./routes/postRouter.js');
+const userRouter = require('./routes/userRouter.js');
+
 const app = express();
 
 // server config
@@ -17,6 +20,8 @@ app.get('/', ( req, res ) => {
         message: 'Homepage'
     });
 });
+app.use('/posts', postRouter);
+app.use('/user', userRouter);
 
 // run server
 app.listen(process.env.SERVER_PORT, (err) => {
