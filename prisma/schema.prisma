@@ -20,6 +20,7 @@ model User {
   firstName String
   lastName  String
   password  String
+  role Role @default(USER)
   createdAt DateTime @default(now())
   posts     Post[]
   comments  Comment[]
@@ -47,4 +48,15 @@ model Comment {
   authorId  Int
   commentOn Post      @relation(fields: [postId], references: [id])
   postId    Int
+}
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   
+  expiresAt   DateTime
+}
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
 }
