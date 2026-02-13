@@ -9,6 +9,12 @@
     <h1>All Posts</h1>
     <% posts.map(post => { %>
         <h3><%= post.title %></h3>
+        <p><%= post.content %></p>
+        <h5>Comments</h5>
+        <% comments.map(comment => { %>
+            <p><%= comment.content %></p>
+        <% }) %>
+        
     <% }) %>
 </body>
 </html>
