@@ -1,9 +1,6 @@
 // import installed packages
 const express = require('express');
 const path = require('node:path');
-const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
-const expressSession = require('express-session');
-const { prisma } = require('../lib/prisma.js');
 const passport = require('passport');
 require('dotenv').config();
 
@@ -15,19 +12,15 @@ const initPassport = require('../lib/passport.js');
 const app = express();
 
 // server config
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'testingViews'))
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'testingViews'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // middlewares
-const prismaStore = new PrismaSessionStore(
-    prisma,
-    {
-        
-    }
-)
+/* initPassport();
+app.use(passport.session());
 app.use(
   expressSession({
     cookie: {
@@ -45,9 +38,7 @@ app.use(
       }
     )
   })
-);
-initPassport();
-app.use(passport.session());
+); */
 
 app.use(( req, res, next ) => {
     res.locals.currentUser = req.user;
