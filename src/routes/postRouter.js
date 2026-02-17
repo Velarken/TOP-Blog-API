@@ -1,14 +1,9 @@
 const { Router } = require('express');
-const { post } = require('../../lib/prisma');
-const dbQueries = require('../../lib/dbQueries.js')
+const postQueries = require('../../lib/db/queries/postQueries.js')
 
 const postRouter = Router();
 
-postRouter.get('/', ( req, res ) => {
-    const posts = dbQueries.getAllPosts()
-    const comments = dbQueries.getCommentsForPost(2)
-    res.render('posts', { posts, comments });
-});
+postRouter.get('/', postQueries.getAllPosts);
 postRouter.get('/search', ( req, res ) => {
     res.json({
         message: 'Show search form with the following fields',
