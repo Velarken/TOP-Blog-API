@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { user } = require('../../lib/prisma');
+const { user } = require('../../deleted/prisma');
 
 const userRouter = Router();
 
