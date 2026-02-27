@@ -1,29 +1,36 @@
 const { Router } = require('express');
-const postQueries = require('../../lib/db/queries/postQueries.js')
+const postController = require('../controllers/postController.js')
 
 const postRouter = Router();
 
-postRouter.get('/', postQueries.getAllPosts);
-postRouter.get('/search', ( req, res ) => {
-    res.json({
-        message: 'Show search form with the following fields',
-        fields: {
-            user: 'Search for all posts by a given user.',
-            keyword: 'Search for all posts with a given keyword.',
-            category: 'Search for all posts within a given category.'
-        }
-    })
-})
-postRouter.get('/search/:userId', ( req, res ) => {
-    // logic to find posts that were created by given userId
-    res.json({
-        message: 'Showing all posts for provided userId.'
-    });
-});
-postRouter.get('/:postId/comments', ( req, res ) => {
-    res.json({
-        message: 'Showing all comments on a single post with provided postId'
-    })
-})
+postRouter.get('/', postController.getAllPublishedPosts);
+postRouter.post('/create', postController.createPost);
+postRouter.post('/:postId/delete', postController.deletePost);
+
+// post publishing
+postRouter.get('/unpublished-posts', postController.getAllUnpublishedPosts);
+postRouter.post('/unpublished-posts/:authorid', postController.getUnpublishedPostsFromUser);
+postRouter.post('/:postid/publish', postController.publishPost);
+postRouter.post('/:postid/unpublish', postController.unpublishPost);
+
+// update single post
+postRouter.post('/:postid/edit-content', postController.updatePostContent);
+postRouter.post('/:postid/edit-title', postController.updatePostTitle);
+
+// search existing posts 
+postRouter.post('/search/:postid', postController.getPostViaId);
+postRouter.post('/search/users/:userId', postController.allPostsByUser);
+postRouter.post('/search/post-content/:keyword', postController.searchPostsViaKeyword);
+postRouter.post('/search/post-title/:keyword', postController.searchPostTitlesViaKeyword);
+postRouter.post('/search/category/:category', postController.searchByCategory);
+
+// admin routes
+postRouter.get('/all', postController.getAllPosts)
+
+// todo
+    // protect relevant routes with JWT
+    // '/search/post-title/:keyword' returns empty brackets
+    // change queries to only return published posts
+    
 
 module.exports = postRouter;
