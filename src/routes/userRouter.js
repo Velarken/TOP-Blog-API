@@ -1,42 +1,22 @@
 const { Router } = require('express');
-const { user } = require('../../deleted/prisma');
+const userController = require('../controllers/userController.js');
 
 const userRouter = Router();
 
-userRouter.get('/', ( req, res ) => {
-    res.json({
-        message: 'Routes for account login and signup'
-    });
-});
-userRouter.get('/login', ( req, res ) => {
-    res.json({
-        username: 'Type username',
-        password: 'Type password',
-        button: 'Login'
-    });
-});
-userRouter.post('/login', ( req, res ) => {
-    res.json({
-        success: 'User is logged in.',
-        failure: 'Username or Password do not match records.'
-    });
-});
-userRouter.get('/signup', ( req, res ) => {
-    res.json({
-        username: 'Please type in desired username.',
-        firstName: 'Please type your first name.',
-        lastName: 'Please type your last name.',
-        email: 'Please type your preferred email address.',
-        password: 'Create a unique password that is between 12 and 32 characters.',
-        confirmPassword: 'Please type the same password again.',
-        button: 'Sign up'
-    });
-});
-userRouter.post('/signup', ( req, res ) => {
-    res.json({
-        success: 'User account created successfully. Redirecting to login page.',
-        failure: 'There was an issue creating your account, please try again.'
-    })
-})
+userRouter.get('/', userController.showAccountInfo);
+userRouter.post('/login', userController.loginUser);
+userRouter.post('/signup',userController.signUpUser);
+// user info update routes
+userRouter.post('/:userid/update-name', userController.updateUserName);
+userRouter.post('/:userid/update-username', userController.updateUserAlias);
+userRouter.post('/:userid/update-password', userController.updateUserPassword);
+// admin only routes
+userRouter.post('/:userid/delete', userController.deleteUser);
+userRouter.post('/:userid/make-admin', userController.makeAdmin);
+userRouter.post('/:userid/remove-admin', userController.removeAdmin);
+userRouter.post('/:userid/allow-posting', userController.allowPostsFromUser);
+userRouter.post('/:userid/disallow-posting', userController.disallowPostsFromUser);
+userRouter.post('/:userid/ban', userController.banUser);
+userRouter.post('/:userid/unban', userController.unbanUser);
 
 module.exports = userRouter;
