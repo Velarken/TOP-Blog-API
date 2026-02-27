@@ -1,19 +1,12 @@
 const { Router } = require('express');
-const commentQueries = require('../../lib/db/queries/commentQueries.js')
+const commentController = require('../controllers/commentController.js');
 
 const commentRouter = Router();
 
-commentRouter.get('/:postid/allComments', async ( req, res ) => {
-    // get post id from request body
-    const { postId } = req.body
-    const postComments = await commentQueries.getCommentsForPost(postId)
-    res.json(postComments)
-})
-commentRouter.post('/:postid/new-comment', ( req, res ) => {
-    
-})
-commentRouter.post('/:postid/edit-comment', ( req, res ) => {
-    
-})
+commentRouter.get('/:postid/allComments', commentController.getCommentsForPost)
+commentRouter.post('/:postid/new-comment', commentController.createNewComment)
+commentRouter.post('/:postid/edit-comment', commentController.updateComment)
+commentRouter.post('/:postid/delete-comment', commentController.deleteComment)
+commentRouter.post('/search/:keyword', commentController.searchPostCommentsForKeyword)
 
 module.exports = commentRouter;
