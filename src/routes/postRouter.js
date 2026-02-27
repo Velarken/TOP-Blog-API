@@ -8,7 +8,6 @@ postRouter.post('/create', postController.createPost);
 postRouter.post('/:postId/delete', postController.deletePost);
 
 // post publishing
-postRouter.get('/unpublished-posts', postController.getAllUnpublishedPosts);
 postRouter.post('/unpublished-posts/:authorid', postController.getUnpublishedPostsFromUser);
 postRouter.post('/:postid/publish', postController.publishPost);
 postRouter.post('/:postid/unpublish', postController.unpublishPost);
@@ -24,13 +23,21 @@ postRouter.post('/search/post-content/:keyword', postController.searchPostsViaKe
 postRouter.post('/search/post-title/:keyword', postController.searchPostTitlesViaKeyword);
 postRouter.post('/search/category/:category', postController.searchByCategory);
 
-// admin routes
-postRouter.get('/all', postController.getAllPosts)
+// admin only routes
+postRouter.get('/all', postController.getAllPosts);
+postRouter.get('/unpublished-posts', postController.getAllUnpublishedPosts);
 
 // todo
     // protect relevant routes with JWT
     // '/search/post-title/:keyword' returns empty brackets
-    // change queries to only return published posts
+    // add comments to fetched post data
+    /* 
+        for (let i = 0; i > postData.length; i++) {
+            // fetch comments for given postid
+            // add comments: [] to given postid
+            // push comments into new array
+        }
+    */
     
 
 module.exports = postRouter;
