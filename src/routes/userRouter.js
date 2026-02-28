@@ -3,7 +3,7 @@ const userController = require('../controllers/userController.js');
 
 const userRouter = Router();
 
-userRouter.get('/', userController.showAccountInfo);
+userRouter.get('/', userController.getUserInfo);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/signup',userController.signUpUser);
 // user info update routes
