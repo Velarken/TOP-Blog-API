@@ -7,7 +7,7 @@ require('dotenv').config();
 // import local files
 const postRouter = require('./routes/postRouter.js');
 const userRouter = require('./routes/userRouter.js');
-const initPassport = require('../lib/passport.js');
+const passportFunctions = require('../lib/passport.js');
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'testingViews'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+passportFunctions.initPassport();
 // middlewares
 /* initPassport();
 app.use(passport.session());
