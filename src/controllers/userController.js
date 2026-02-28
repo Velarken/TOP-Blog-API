@@ -1,4 +1,7 @@
 const userQueries = require('../../lib/db/queries/userQueries.js');
+const jwt = require('../../lib/jwt.js')
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 async function getUserInfo( req, res ) {
     const { userid } = req.body;
@@ -9,12 +12,29 @@ async function signUpUser( req, res ) {
     await userQueries.createNewUser(username, firstname, lastname, email, password)
     return
 }
-async function loginUser( req, res ) {
+async function loginUser( req, res, next ) {
     const { username, password } = req.body;
-    await userQueries.logInUser(username, password);
-    // add JWT generation to this call 
-    // add db session store to this call
+
+    const userData = await userQueries.logInUser(username);
+    if (userData == []) {
+        res.statusCode(400).json({ message: 'Username is incorrect' })
+        return
+    }
+    console.table(userData[0].password)
+    const comparePassword = await bcrypt.compare(password, userData[0].password)
+    if (!comparePassword) {
+        res.statusCode(400).json({ message: 'Password is incorrect!' })
+        return
+    }
+    // create new JWT for user
+    const tokenData = { id: userData.id, username: userData.username, firstName: userData.firstName }
+    const userToken = jwt.createToken(tokenData, process.env.ACCESS_TOKEN_SECRET, {exipresIn: '1h'});
+    const cookieData = JSON.stringify({token: userToken}, {expiresIn: 60*60*1000, httpOnly: true})
+    
+    res.cookie('JWT', cookieData);
+    res.status(200).json({message: 'Cookie set successfully'})
     return
+    // add db session store to this call
 }
 async function deleteUser( req, res ) { // self or admin use
     const { userid } = req.body;
